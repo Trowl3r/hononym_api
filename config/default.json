@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://Trowl:ILoveKurumi1@hononym.fs3zv.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "jwtSecret": "testSecret"
+}
