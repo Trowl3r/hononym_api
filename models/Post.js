@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 const PostSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+  profileImage: {
+    type: String
   },
   text: {
     type: String,
@@ -11,6 +15,9 @@ const PostSchema = new Schema({
   },
   username: {
     type: String,
+  },
+  name: {
+    type: String
   },
   likes: [
     {

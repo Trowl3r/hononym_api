@@ -5,6 +5,7 @@ const auth = require("../middleware/auth");
 
 const Post = require("../models/Post");
 const User = require("../models/User");
+const Profile = require("../models/Profile");
 const checkId = require("../middleware/checkId");
 
 // @route    POST api/posts
@@ -21,8 +22,11 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select("-password");
+      const profile = await Profile.findOne({user: req.user.id}).select("profileImage").select("name").select("-_id");
 
       const newPost = new Post({
+        profileImage: profile.profileImage,
+        name: profile.name,
         text: req.body.text,
         username: user.username,
         user: req.user.id,

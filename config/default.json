@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://Trowl:ILoveKurumi1@hononym.fs3zv.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "mongoURI": "mongodb+srv://trowl:ILoveKurumi1@hononym.3jyak.mongodb.net/<dbname>?retryWrites=true&w=majority",
     "jwtSecret": "testSecret"
 }
