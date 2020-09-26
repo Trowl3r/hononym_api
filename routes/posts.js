@@ -253,7 +253,7 @@ router.post(
       return res.json(comment.likes);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 );
@@ -291,9 +291,23 @@ router.post(
       return res.json(comment.likes);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 );
+
+// @route    GET api/posts/profile/:id
+// @desc     Get all Posts by Id
+// @access   Private
+router.get("/profile/:id", [checkId("id")], async (req, res) => {
+  try {
+    const posts = await Post.find({user: req.params.id}).sort({ date: -1 });
+
+    return res.json(posts);
+  } catch(err) {
+    console.error(err.message);
+    return res.status(500).send("Server Error");
+  }
+})
 
 module.exports = router;
