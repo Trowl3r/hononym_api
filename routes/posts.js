@@ -168,11 +168,14 @@ router.post(
     try {
       const user = await User.findById(req.user.id).select("-password");
       const post = await Post.findById(req.params.id);
+      const profile = await Profile.findOne({user: req.user.id}).select("profileImage").select("name").select("-_id");
 
       const newComment = {
         text: req.body.text,
         username: user.username,
         user: req.user.id,
+        name: profile.name,
+        profileImage: profile.profileImage
       };
 
       post.comments.unshift(newComment);

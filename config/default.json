@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://trowl:ILoveKurumi1@hononym.3jyak.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "mongoURI": "mongodb://127.0.0.1:27017/hononym",
     "jwtSecret": "testSecret"
 }
