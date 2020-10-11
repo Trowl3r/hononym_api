@@ -9,6 +9,7 @@ const { check, validationResult } = require("express-validator");
 const Group = require("../models/Group");
 const User = require("../models/User");
 const Post = require("../models/Post");
+const Profile = require("../models/Profile");
 
 // @route    POST api/group/create
 // @desc     Create a Group
@@ -339,7 +340,7 @@ router.post(
 // @access   Private
 router.post(
   "/group-post/:id",
-  [[check("text", "Text is required").not().isEmpty()], auth],
+  [auth, [check("text", "Text is required").not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -348,6 +349,7 @@ router.post(
 
     try {
       const group = await Group.findById(req.params.id);
+      console.log(req.body.text)
 
       if(!group) {
         return res.status(400).send("No group found");
@@ -360,22 +362,27 @@ router.post(
       }
 
       const user = await User.findById(req.user.id).select("-password");
+      const profile = await Profile.findOne({user: req.user.id}).select("profileImage").select("name").select("-_id");
 
       const newPost = new Post({
+        profileImage: profile.profileImage,
+        name: profile.name,
         text: req.body.text,
         username: user.username,
         user: req.user.id,
+        group: group.name
       });
 
       const post = await newPost.save();
 
       const newPosting = await Post.findById(post._id);
+      console.log(newPosting);
 
       group.posts.unshift({post: newPosting._id});
       
       await group.save();
 
-      return res.json(group)
+      return res.json(post)
     } catch (err) {
       console.error(err);
       return res.status(500).send("Server Error");
@@ -424,8 +431,15 @@ router.delete("/delete-group-post/:group_id/:id", [auth, checkId("group_id"), ch
 router.get("/get-group-posts/:id", [checkId("id")], async (req, res) => {
   try {
     const groupsPosts = await Group.findById(req.params.id).select("posts");
+    console.log(groupsPosts);
+    let posts = [];
+    for(let i = 0; i < groupsPosts.posts.length; i++) {
+      const currentPost = groupsPosts.posts[i];
+      const post = await Post.findById(currentPost.post);
+      posts.push(post);
+    }
 
-    return res.json(groupsPosts);
+    return res.json(posts);
   } catch(err) {
     console.error(err);
     return res.status(500).send("Server Error");

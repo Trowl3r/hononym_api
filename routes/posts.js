@@ -48,7 +48,10 @@ router.post(
 router.get("/get-posts", auth, async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
-    res.json(posts);
+
+    const finalPosts = posts.filter(post => post.group === null);
+
+    res.json(finalPosts);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -303,7 +306,9 @@ router.get("/profile/:id", [checkId("id")], async (req, res) => {
   try {
     const posts = await Post.find({user: req.params.id}).sort({ date: -1 });
 
-    return res.json(posts);
+    const finalPosts = posts.filter(post => post.group === null)
+
+    return res.json(finalPosts);
   } catch(err) {
     console.error(err.message);
     return res.status(500).send("Server Error");

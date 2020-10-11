@@ -60,6 +60,10 @@ const PostSchema = new Schema({
       ],
     },
   ],
+  group: {
+    type: String,
+    default: null
+  },
   date: {
     type: Date,
     default: Date.now,

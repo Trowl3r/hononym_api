@@ -5,6 +5,7 @@ const { check, validationResult } = require("express-validator");
 const checkId = require("../middleware/checkId");
 const Profile = require("../models/Profile");
 const User = require("../models/User");
+const Post = require("../models/Post");
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
@@ -13,7 +14,7 @@ router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id,
-    }).populate("user", ["name", "profileImage"]);
+    }).populate("user", ["username"]);
 
     if (!profile) {
       return res
@@ -92,9 +93,9 @@ router.post("/changepb", auth, async (req, res) => {
     
     const id = req.user.id;
 
-    const ending = profilePic.mimetype.replace("image/", ".");
+    //const ending = profilePic.mimetype.replace("image/png", ".png");
 
-    const fileName = id + ending;
+    const fileName = id + ".png";
 
     profilePic.mv(`./public/${fileName}`);
 
